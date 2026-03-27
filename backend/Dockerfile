@@ -9,5 +9,9 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+
+# MUST expose port 8080
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Use exec form for correct signal handling
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
